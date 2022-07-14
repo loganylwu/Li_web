@@ -12,7 +12,7 @@ export default [
       {
         path: 'base',
         name: 'DashboardBase',
-        component: () => import('@/pages/dashboard/base/index.vue'),
+        component: () => import('@/pages/config/base/index.vue'),
         meta: { title: '概览仪表盘' },
       },
       {
