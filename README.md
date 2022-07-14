@@ -16,6 +16,12 @@ npm run build
 ## 构建测试环境
 npm run build:test
 ```
+### 提交git规范
+`build, chore, ci, docs, feat, fix, perf, refactor, revert, style, test`
+```text
+ build: do some thing .....
+```
+
 
 ### 其他
 
