@@ -11,9 +11,18 @@
   >
     <div class="form-basic-container">
       <div class="form-basic-item">
-        <div class="form-basic-container-title">合同信息</div>
+        <div class="form-basic-container-title">WebPack 配置项</div>
         <!-- 表单内容 -->
 
+        <t-row class="row-gap" :gutter="[16, 24]">
+          <t-form-item label="css loaders" name="course" initial-data="['1']">
+            <t-checkbox-group>
+              <t-checkbox v-for="cssLoader in cssLoaders" :key="cssLoader.id" :value="cssLoader.value">
+                {{ cssLoader.text }}
+              </t-checkbox>
+            </t-checkbox-group>
+          </t-form-item>
+        </t-row>
         <!-- 合同名称,合同类型 -->
         <t-row class="row-gap" :gutter="[16, 24]">
           <t-col :span="6">
@@ -41,8 +50,8 @@
           <t-col :span="8">
             <t-form-item label="合同收付类型" name="payment">
               <t-radio-group v-model="formData.payment">
-                <t-radio value="1"> 收款 </t-radio>
-                <t-radio value="2"> 付款 </t-radio>
+                <t-radio value="1"> 收款</t-radio>
+                <t-radio value="2"> 付款</t-radio>
               </t-radio-group>
               <span class="space-item" />
               <div>
@@ -125,7 +134,7 @@
                 :before-upload="beforeUpload"
                 @fail="handleFail"
               >
-                <t-button class="form-submit-upload-btn" variant="outline"> 上传合同文件 </t-button>
+                <t-button class="form-submit-upload-btn" variant="outline"> 上传合同文件</t-button>
               </t-upload>
             </t-form-item>
           </t-col>
@@ -144,32 +153,33 @@
           </t-avatar-group>
         </t-form-item>
       </div>
+      <div id="codeView" class="form-basic-editor"></div>
     </div>
 
-    <div class="form-submit-container">
-      <div class="form-submit-sub">
-        <div class="form-submit-left">
-          <t-button theme="primary" class="form-submit-confirm" type="submit"> 提交 </t-button>
-          <t-button type="reset" class="form-submit-cancel" theme="default" variant="base"> 取消 </t-button>
-        </div>
-      </div>
-    </div>
+    <!--    <div class="form-submit-container">
+          <div class="form-submit-sub">
+            <div class="form-submit-left">
+              <t-button theme="primary" class="form-submit-confirm" type="submit"> 提交</t-button>
+              <t-button type="reset" class="form-submit-cancel" theme="default" variant="base"> 取消</t-button>
+            </div>
+          </div>
+        </div>-->
   </t-form>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'FormBase',
-};
-</script>
-
-<script setup lang="ts">
-import { ref } from 'vue';
+<script setup lang="tsx">
+import { onMounted, ref } from 'vue';
 import { MessagePlugin } from 'tdesign-vue-next';
 import { FORM_RULES, INITIAL_DATA, TYPE_OPTIONS, PARTY_A_OPTIONS, PARTY_B_OPTIONS } from './constants';
+import useMonacoEditor from '@/pages/config/base/useMonacoEditor';
+import useASTCompiler from '@/pages/config/base/useASTCompiler';
 
 const formData = ref({ ...INITIAL_DATA });
-
+const cssLoaders = ref([
+  { text: 'css-loader', value: 'css-loader', index: 0, id: 1 },
+  { text: 'postcss-loader', value: 'postcss-loader', index: 1, id: 2 },
+  { text: 'sass-loader', value: 'sass-loader', index: 2, id: 3 },
+]);
 const onReset = () => {
   MessagePlugin.warning('取消新建');
 };
@@ -196,6 +206,16 @@ const handleFail = ({ file }) => {
 const formatResponse = (res) => {
   return { ...res, error: '上传失败，请重试', url: res.url };
 };
+onMounted(() => {
+  const element = document.getElementById('codeView');
+  const { codeValue } = useMonacoEditor(element);
+  // var {parse} = useASTParser();
+  // console.log(parse);
+  setTimeout(() => {
+    const { out } = useASTCompiler();
+    codeValue.value = out;
+  }, 1000);
+});
 </script>
 
 <style lang="less" scoped>

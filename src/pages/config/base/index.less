@@ -2,10 +2,10 @@
 
 .form-basic-container {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  //align-items: center;
+  //justify-content: center;
   background-color: var(--td-bg-color-container);
-  padding: 0 32px 134px;
+  padding: 0px;
 
   @media (max-width: @screen-sm-max) {
     padding: 0 32px 67px;
@@ -16,6 +16,8 @@
   }
 
   .form-basic-item {
+    padding: 20px;
+    flex-grow: 0;
     width: 676px;
 
     .form-basic-container-title {
@@ -24,6 +26,11 @@
       color: var(--td-text-color-primary);
       margin: 64px 0 32px;
     }
+  }
+
+  .form-basic-editor {
+    flex-grow: 1;
+    margin: 10px;
   }
 }
 
