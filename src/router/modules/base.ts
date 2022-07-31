@@ -24,7 +24,7 @@ export default [
       {
         path: "mongo",
         name: 'mongoMgr',
-        component: () => import('@/pages/dataMgr/tree/index.vue'),
+        component: () => import('@/pages/dataMgr/mongo/index.vue'),
         meta: { title: 'mongoDB 数据管理' },
       },
     ],

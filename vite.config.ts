@@ -9,7 +9,7 @@ import path from 'path';
 const CWD = process.cwd();
 
 // https://vitejs.dev/config/
-export default ({ mode }: ConfigEnv): UserConfig => {
+export default ({ mode,command }: ConfigEnv): UserConfig => {
   const { VITE_BASE_URL } = loadEnv(mode, CWD);
   return {
     base: VITE_BASE_URL,
@@ -24,7 +24,9 @@ export default ({ mode }: ConfigEnv): UserConfig => {
       vueJsx(),
       viteMockServe({
         mockPath: 'mock',
-        localEnabled: true,
+        // 可以用command 来动态判断
+        // command === 'serve'
+        localEnabled: false,
       }),
       svgLoader(),
     ],
