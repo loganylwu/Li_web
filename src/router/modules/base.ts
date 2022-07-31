@@ -7,7 +7,7 @@ export default [
     component: Layout,
     redirect: '/dashboard/base',
     name: 'dashboard',
-    meta: { title: '仪表盘', icon: DashboardIcon },
+    meta: { title: '基本功能', icon: DashboardIcon },
     children: [
       {
         path: 'base',
@@ -20,6 +20,12 @@ export default [
         name: 'DashboardDetail',
         component: () => import('@/pages/dashboard/detail/index.vue'),
         meta: { title: '统计报表' },
+      },
+      {
+        path: "mongo",
+        name: 'mongoMgr',
+        component: () => import('@/pages/dataMgr/tree/index.vue'),
+        meta: { title: 'mongoDB 数据管理' },
       },
     ],
   },
