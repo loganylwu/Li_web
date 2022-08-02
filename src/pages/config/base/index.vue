@@ -1,4 +1,5 @@
 <template>
+
   <t-form
     ref="form"
     class="base-form"
@@ -9,16 +10,19 @@
     @reset="onReset"
     @submit="onSubmit"
   >
-    <div class="form-basic-container">
-      <div class="form-basic-item">
-        <div class="form-basic-container-title">WebPack 配置项</div>
-        <!-- 表单内容 -->
 
+    <div class="form-basic-container">
+
+      <div class="form-basic-item">
+        <h2>webpack配置项</h2>
+        <!-- 表单内容 -->
         <t-row class="row-gap" :gutter="[16, 24]">
-          <t-form-item label="css loaders" name="course" initial-data="['1']">
-            <t-checkbox-group>
-              <t-checkbox v-for="cssLoader in cssLoaders" :key="cssLoader.id" :value="cssLoader.value">
-                {{ cssLoader.text }}
+          <t-form-item label="css loaders" name="course">
+            <t-checkbox-group
+              v-model="formData.course">
+              <t-checkbox v-for="cssLoader in cssLoaders" :key="cssLoader.id" :value="cssLoader.value">{{
+                  cssLoader.text
+                }}
               </t-checkbox>
             </t-checkbox-group>
           </t-form-item>
@@ -27,7 +31,7 @@
         <t-row class="row-gap" :gutter="[16, 24]">
           <t-col :span="6">
             <t-form-item label="合同名称" name="name">
-              <t-input v-model="formData.name" :style="{ width: '322px' }" placeholder="请输入内容" />
+              <t-input v-model="formData.name" :style="{ width: '322px' }" placeholder="请输入内容"/>
             </t-form-item>
           </t-col>
           <t-col :span="6">
@@ -53,9 +57,9 @@
                 <t-radio value="1"> 收款</t-radio>
                 <t-radio value="2"> 付款</t-radio>
               </t-radio-group>
-              <span class="space-item" />
+              <span class="space-item"/>
               <div>
-                <t-input placeholder="请输入金额" :style="{ width: '160px' }" />
+                <t-input placeholder="请输入金额" :style="{ width: '160px' }"/>
               </div>
             </t-form-item>
           </t-col>
@@ -143,7 +147,7 @@
         <div class="form-basic-container-title form-title-gap">其它信息</div>
 
         <t-form-item label="备注" name="comment">
-          <t-textarea v-model="formData.comment" :height="124" placeholder="请输入备注" />
+          <t-textarea v-model="formData.comment" :height="124" placeholder="请输入备注"/>
         </t-form-item>
         <t-form-item label="公证人">
           <t-avatar-group>
@@ -166,24 +170,44 @@
         </div>-->
   </t-form>
 </template>
-
+<script lang="tsx">
+export default {
+  name: 'ConfigPage'
+}
+</script>
 <script setup lang="tsx">
-import { onMounted, ref } from 'vue';
-import { MessagePlugin } from 'tdesign-vue-next';
-import { FORM_RULES, INITIAL_DATA, TYPE_OPTIONS, PARTY_A_OPTIONS, PARTY_B_OPTIONS } from './constants';
+import {onMounted, ref, watch} from 'vue';
+import {MessagePlugin} from 'tdesign-vue-next';
+import {FORM_RULES, TYPE_OPTIONS, PARTY_A_OPTIONS, PARTY_B_OPTIONS} from './constants';
 import useMonacoEditor from '@/pages/config/base/useMonacoEditor';
 import useASTCompiler from '@/pages/config/base/useASTCompiler';
+import {useCssLoader} from "@/service/useCssLoader";
 
-const formData = ref({ ...INITIAL_DATA });
-const cssLoaders = ref([
-  { text: 'css-loader', value: 'css-loader', index: 0, id: 1 },
-  { text: 'postcss-loader', value: 'postcss-loader', index: 1, id: 2 },
-  { text: 'sass-loader', value: 'sass-loader', index: 2, id: 3 },
-]);
+
+
+
+const formData = ref({
+  course: [],
+  name: '',
+  type: '',
+  partyA: '',
+  partyB: '',
+  signDate: '',
+  startDate: '',
+  endDate: '',
+  payment: '1',
+  amount: 0,
+  comment: '',
+  files: [],
+})
+
+
+const {cssLoaders} = useCssLoader();
+
 const onReset = () => {
   MessagePlugin.warning('取消新建');
 };
-const onSubmit = ({ validateResult }) => {
+const onSubmit = ({validateResult}) => {
   if (validateResult === true) {
     MessagePlugin.success('新建成功');
   }
@@ -199,20 +223,20 @@ const beforeUpload = (file) => {
   }
   return true;
 };
-const handleFail = ({ file }) => {
+const handleFail = ({file}) => {
   MessagePlugin.error(`文件 ${file.name} 上传失败`);
 };
 // 用于格式化接口响应值，error 会被用于上传失败的提示文字；url 表示文件/图片地址
 const formatResponse = (res) => {
-  return { ...res, error: '上传失败，请重试', url: res.url };
+  return {...res, error: '上传失败，请重试', url: res.url};
 };
 onMounted(() => {
   const element = document.getElementById('codeView');
-  const { codeValue } = useMonacoEditor(element);
+  const {codeValue} = useMonacoEditor(element);
   // var {parse} = useASTParser();
   // console.log(parse);
   setTimeout(() => {
-    const { out } = useASTCompiler();
+    const {out} = useASTCompiler();
     codeValue.value = out;
   }, 1000);
 });
